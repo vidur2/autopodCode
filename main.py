@@ -42,15 +42,20 @@ def main():
 
         biggestArea = 0
         largest = (0, 0, 0, 0)
-        (xA, yA, xB, yB) = boxes[0]
+        (lXA, lYA, lXB, lYB) = (0, 0, 0, 0)
 
         for (xA, yA, xB, yB) in boxes:
             # display the detected boxes in the colour picture 
             cv2.rectangle(frame, (xA, yA), (xB, yB),
                             (0, 255, 0), 2)
-        xCenter = (xA + xB)/2 - (width/2)
+            area = (xB - xA) * (yB - yA)
+
+            if (area > biggestArea):
+                biggestArea = area
+                lXA, lXB, lYA, lYB = xA, xB, yA, yB
+        xCenter = (lXA + lXB)/2 - (width/2)
         turnSpeed = WheelSpeeds.convertImgToTurnSpeed(xCenter, width)
-        driveSpeed = WheelSpeeds.convertImgToDriveSpeed(xA, xB, yA, yB, width, height)
+        driveSpeed = WheelSpeeds.convertImgToDriveSpeed(lXA, lXB, lYA, lYB, width, height)
         
         # Display the resulting frame
         cv2.imshow('frame',frame)
